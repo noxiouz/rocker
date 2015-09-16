@@ -35,6 +35,23 @@ var (
 	DefaultEndpoint = "unix:///var/run/docker.sock"
 )
 
+type DockerClient interface {
+	BuildImage(opts docker.BuildImageOptions) error
+	InspectContainer(id string) (*docker.Container, error)
+	TagImage(name string, opts docker.TagImageOptions) error
+	CreateContainer(opts docker.CreateContainerOptions) (*docker.Container, error)
+	RemoveContainer(opts docker.RemoveContainerOptions) error
+	AttachToContainer(opts docker.AttachToContainerOptions) error
+	StartContainer(id string, hostConfig *docker.HostConfig) error
+	WaitContainer(id string) (int, error)
+	CommitContainer(opts docker.CommitContainerOptions) (*docker.Image, error)
+	InspectImage(name string) (*docker.Image, error)
+	ListImages(opts docker.ListImagesOptions) ([]docker.APIImages, error)
+	PullImage(opts docker.PullImageOptions, auth docker.AuthConfiguration) error
+	PushImage(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
+	ResizeContainerTTY(id string, height, width int) error
+}
+
 // Config represents docker client connection parameters
 type Config struct {
 	Host      string

@@ -26,6 +26,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"rocker/dockerclient"
 	"rocker/imagename"
 	"rocker/parser"
 	"rocker/template"
@@ -56,7 +57,7 @@ type Builder struct {
 	ID                string
 	OutStream         io.Writer
 	InStream          io.ReadCloser
-	Docker            *docker.Client
+	Docker            dockerclient.DockerClient
 	Config            *docker.Config
 	Auth              *docker.AuthConfiguration
 	UtilizeCache      bool

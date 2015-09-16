@@ -23,8 +23,6 @@ import (
 	"path/filepath"
 	"rocker/util"
 	"strings"
-
-	"github.com/fsouza/go-dockerclient"
 )
 
 const (
@@ -62,7 +60,7 @@ func MyDockerID() (string, error) {
 // resolves the given path according to the container's rootfs on the host
 // machine. It also considers the mounted directories to the current container, so
 // if given path is pointing to the mounted directory, it resolves correctly.
-func ResolveHostPath(mountPath string, client *docker.Client) (string, error) {
+func ResolveHostPath(mountPath string, client DockerClient) (string, error) {
 	// Accept only absolute path
 	if !filepath.IsAbs(mountPath) {
 		return "", fmt.Errorf("ResolveHostPath accepts only absolute paths, given: %s", mountPath)
