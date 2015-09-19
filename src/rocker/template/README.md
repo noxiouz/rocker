@@ -114,7 +114,31 @@ Example:
 HOME={{ .Env.HOME }}
 ```
 
-# Load file content to a variable
+### Automatic variables population
+Environment variables with `ROCKER_VAR_` prefix will automatically populate to the root scope. This is useful when you want to globally override the variable used in all `Rockerfile` or `compose.yml` on your machine.
+
+Example:
+
+```bash
+export ROCKER_VAR_LOCAL_MAVEN="~/.maven:"
+```
+
+Rockerfile:
+```Dockerfile
+MOUNT {{ or .LOCAL_MAVEN "" }}/root/.maven
+```
+
+If you have `ROCKER_VAR_LOCAL_MAVEN` set, then your local directory will be always used for such mounts:
+```Dockerfile
+MOUNT ~/.maven:/root/.maven
+```
+
+Otherwise:
+```Dockerfile
+MOUNT /root/.maven
+```
+
+### Load file content to a variable
 This template engine also supports loading files content to a variables. `rocker` and `rocker-compose` support this through a command line parameters:
 
 ```bash

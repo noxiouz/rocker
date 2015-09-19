@@ -32,6 +32,10 @@ import (
 	"github.com/kr/pretty"
 )
 
+var (
+	RockerVarEnvPrefix = "ROCKER_VAR_"
+)
+
 // Process renders config through the template processor.
 // vars and additional functions are acceptable.
 func Process(name string, reader io.Reader, vars Vars, funcs map[string]interface{}) (*bytes.Buffer, error) {
@@ -46,6 +50,14 @@ func Process(name string, reader io.Reader, vars Vars, funcs map[string]interfac
 	// merge OS environment variables with the given Vars map
 	// todo: maybe, we need to make it configurable
 	vars["Env"] = ParseKvPairs(os.Environ())
+
+	// Populate vars from env prefixed with ROCKER_VAR_ to vars root
+	for k, v := range vars["Env"].(Vars) {
+		if strings.HasPrefix(k, RockerVarEnvPrefix) {
+			l := len(RockerVarEnvPrefix)
+			vars[k[l:]] = v
+		}
+	}
 
 	// Populate functions
 	funcMap := map[string]interface{}{

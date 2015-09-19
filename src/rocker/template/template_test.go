@@ -87,6 +87,11 @@ func TestProcess_Env(t *testing.T) {
 	assert.Equal(t, kv[1], processTemplate(t, fmt.Sprintf("{{ .Env.%s }}", kv[0])))
 }
 
+func TestProcess_RockerVars(t *testing.T) {
+	os.Setenv(RockerVarEnvPrefix+"Age", "145")
+	assert.Equal(t, "145", processTemplate(t, "{{ .Age }}"))
+}
+
 func TestProcess_Dump(t *testing.T) {
 	assert.Equal(t, `map[string]string{"foo":"bar"}`, processTemplate(t, "{{ dump .data }}"))
 }
